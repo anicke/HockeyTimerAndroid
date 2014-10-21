@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HockeyApp</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="enable_sound">Enable Sound</string>
+    <string name="enable_sound_summ">Enable Sound</string>
+    <string name="update_interval">Timer update interval</string>
+    <string name="update_interval_summ">The interval in milliseconds between each timer update.</string>
+    <string name="timer_text">Press screen\nto start</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="default_score">0</string>
+    <string name="reset_dialog_question">Do you want to reset current timer?</string>
+    <string name="reset_dialog_title">Reset timer</string>
+    <string name="title_activity_timer">TimerActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+</resources>

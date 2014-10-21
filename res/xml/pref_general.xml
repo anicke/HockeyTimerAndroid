@@ -1,0 +1,15 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="enable_sound"
+        android:title="@string/enable_sound"
+        android:summaryOn="Sound is Enabled."
+        android:summaryOff="Sound is Disabled."
+        android:summary="@string/enable_sound_summ"
+        android:defaultValue="true" />
+    <EditTextPreference
+        android:key="update_interval"
+        android:numeric="integer"
+        android:title="@string/update_interval"
+        android:summary="@string/update_interval_summ"
+        android:defaultValue="@integer/update_interval"/>
+</PreferenceScreen>

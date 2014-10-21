@@ -1,0 +1,56 @@
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainLayout"
+    android:focusableInTouchMode="false">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".50">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".50"
+            android:textColor="#33b5e5"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/default_score"
+            android:id="@+id/homeTeam"
+            android:onClick="increase_home_team_score"
+            android:gravity="bottom|fill_vertical|center_horizontal"
+            android:textSize="80dp"
+            android:layout_gravity="center"
+            android:clickable="true" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".50"
+            android:textColor="#33b5e5"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/default_score"
+            android:onClick="increase_away_team_score"
+            android:id="@+id/awayTeam"
+            android:gravity="center_vertical|bottom|fill_vertical|center_horizontal"
+            android:textSize="80sp"
+            android:layout_gravity="center"
+            android:clickable="true" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textColor="#33b5e5"
+        android:layout_weight=".30"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="00:00"
+        android:gravity="top|center_horizontal"
+        android:textSize="100dp"
+        android:id="@+id/timerText"
+        android:clickable="true"
+        android:onClick="toggleTimer" />
+</LinearLayout>
