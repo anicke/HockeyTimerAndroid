@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="update_interval">600</integer>
+    <integer name="custom_match_length">3</integer>
+    <integer name="default_game_preamble_time">15</integer>
+    <bool name="default_enable_preamble_time">true</bool>
 </resources>

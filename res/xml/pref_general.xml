@@ -1,4 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Settings">
     <CheckBoxPreference
         android:key="enable_sound"
         android:title="@string/enable_sound"
@@ -6,10 +7,45 @@
         android:summaryOff="Sound is Disabled."
         android:summary="@string/enable_sound_summ"
         android:defaultValue="true" />
-    <EditTextPreference
-        android:key="update_interval"
-        android:numeric="integer"
-        android:title="@string/update_interval"
-        android:summary="@string/update_interval_summ"
-        android:defaultValue="@integer/update_interval"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Custom match length">
+        <CheckBoxPreference
+            android:key="enable_custom_match_length"
+            android:title="@string/custom_match_length"
+            android:summaryOn="Custom game timer is enabled."
+            android:summaryOff="Game timer is the default 5 minutes."
+            android:summary="@string/custom_match_length_summ"
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="enable_tts"
+            android:title="@string/enable_tts"
+            android:dependency="enable_custom_match_length"
+            android:summaryOn="TTS is enabled."
+            android:summaryOff="TTS is disabled."
+            android:summary="@string/enable_tts_summ"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="enable_game_preamble"
+            android:title="@string/custom_game_enable_preamble"
+            android:dependency="enable_custom_match_length"
+            android:summaryOn="Game preamble is enabled."
+            android:summaryOff="Game preamble is disabled."
+            android:summary="@string/enable_tts_summ"
+            android:defaultValue="true"/>
+        <EditTextPreference
+            android:key="match_preamble_time"
+            android:numeric="integer"
+            android:dependency="enable_game_preamble"
+            android:title="@string/custom_game_preamble_time"
+            android:summary="@string/custom_game_preamble_time_summary"
+            android:defaultValue="@integer/default_game_preamble_time"/>
+        <EditTextPreference
+            android:key="custom_game_length"
+            android:numeric="integer"
+            android:dependency="enable_custom_match_length"
+            android:title="@string/custom_game_length"
+            android:summary="@string/custom_game_length_summ"
+            android:defaultValue="@integer/custom_match_length"/>
+    </PreferenceCategory>
 </PreferenceScreen>

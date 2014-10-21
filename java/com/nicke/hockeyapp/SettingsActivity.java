@@ -1,13 +1,17 @@
 package com.nicke.hockeyapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.List;
@@ -24,13 +28,9 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends PreferenceActivity {
-    /**
-     * Determines whether to always show the simplified settings UI, where
-     * settings are presented in a single list. When false, settings are shown
-     * as a master/detail two-pane view on tablets. When true, a single pane is
-     * shown on tablets.
-     */
+
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
+    public static final String TAG = "SettingsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +77,30 @@ public class SettingsActivity extends PreferenceActivity {
         // In the simplified UI, fragments are not used at all and we instead
         // use the older PreferenceActivity APIs.
 
-        // Add 'general' preferences.
+        // get default values from resources.
+        Resources r = getResources();
+        String default_match_length = Integer.toString(r.getInteger(R.integer.custom_match_length));
+        String default_preamble = Integer.toString(r.getInteger(R.integer.default_game_preamble_time));
+
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Add 'general' preferences.´
+
         addPreferencesFromResource(R.xml.pref_general);
         bindPreferenceSummaryToValue(findPreference("enable_sound"));
+        bindPreferenceSummaryToValue(findPreference("enable_custom_match_length"));
+        Preference custom_length = findPreference("custom_game_length");
+        Preference match_preamble_time = findPreference("match_preamble_time");
+        String summary_preamble_time = "Game preamble is " +
+                prefs.getString("match_preamble_time", default_preamble)+ " seconds.";
+        match_preamble_time.setSummary(summary_preamble_time);
+        bindPreferenceSummaryToValue(match_preamble_time);
+
+        String game_length_summary = "Game length is " +
+                prefs.getString("custom_game_length", default_match_length) + " minutes.";
+        custom_length.setSummary(game_length_summary);
+        bindPreferenceSummaryToValue(custom_length);
     }
 
     /** {@inheritDoc} */
@@ -116,11 +137,18 @@ public class SettingsActivity extends PreferenceActivity {
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
+            Log.d(TAG, "Setting changed with key: " + preference.getKey());
             String stringValue = value.toString();
-
-            if (preference instanceof CheckBoxPreference) {
-                //
-            } else {
+            if(preference.getKey().equals("update_interval")) {
+                preference.setSummary("Timer update interval is " + stringValue + " milliseconds.");
+            }
+            else if(preference.getKey().equals("custom_game_length")) {
+                preference.setSummary("Custom game length is " + stringValue + " minutes.");
+            }
+            else if(preference.getKey().equals("match_preamble_time")) {
+                preference.setSummary("Game preamble is " + stringValue + " seconds.");
+            }
+            else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);

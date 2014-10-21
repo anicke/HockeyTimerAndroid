@@ -51,18 +51,10 @@ public class MainActivity extends Activity {
                 stopPlayer();
                 catch_long_click();
                 return true;
-            }
+                }
         }
         );
     }
-
-    /*
-    protected void onPause () {
-        Log.d(TAG, "Application pause!");
-        super.onPause();
-        stopPlayer();
-    }
-    */
 
     public void stop_timer(){
         // stop the timer

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">HockeyApp</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -15,7 +14,14 @@
     <string name="reset_dialog_question">Do you want to reset current timer?</string>
     <string name="reset_dialog_title">Reset timer</string>
     <string name="title_activity_timer">TimerActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="custom_match_length">Enable custom match length</string>
+    <string name="custom_match_length_summ">Enable custom match length</string>
+    <string name="enable_tts">Enable tts.</string>
+    <string name="enable_tts_summ">Enables text to speech for time updates.</string>
+    <string name="custom_game_length">Custom game length in minutes.</string>
+    <string name="custom_game_length_summ">Custom game length in minutes.</string>
+    <string name="custom_game_enable_preamble">Enable game preamble time.</string>
+    <string name="custom_game_preamble_time_summary">The number of seconds before the game starts.</string>
+    <string name="custom_game_preamble_time">Game preamble in seconds.</string>
 
 </resources>
