@@ -5,17 +5,79 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="1"
-    android:onClick="toggleTimer"
     tools:context=".MyActivity"
     android:id="@+id/mainLayout">
-    <TextView
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:textColor="#33b5e5"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/timer_text"
-        android:id="@+id/timerText"
-        android:height="100dp"
-        android:textSize="70sp" />
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:id="@+id/text_layout">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:textColor="#33b5e5"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/app_name"
+            android:id="@+id/timerText"
+            android:textSize="70sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:padding="40dp"
+        android:baselineAligned="true">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/border"
+            android:padding="20dp"
+            android:onClick="start_custom_timer">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:textColor="#33b5e5"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/custom_timer_text"
+                android:id="@+id/custom_timer"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#33b5e5"
+                android:id="@+id/Custom_timer_settings" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/border"
+            android:padding="20dp"
+            android:onClick="start_default_timer">
+
+            <TextView
+                android:textColor="#33b5e5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/default_timer_text"
+                android:id="@+id/default_timer" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 </LinearLayout>

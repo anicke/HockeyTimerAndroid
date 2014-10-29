@@ -1,108 +1,57 @@
 package com.nicke.hockeyapp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.media.MediaPlayer;
-import android.content.DialogInterface;
 import android.preference.PreferenceManager;
-import android.view.Menu;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.TextView;
 import android.widget.LinearLayout;
-import android.os.Build;
-
-import java.util.Locale;
+import android.widget.TextView;
 
 
 public class MainActivity extends Activity {
     private static final String TAG = "HockeyTimer";
-    MediaPlayer mPlayer;
-    public TextView CurrentTimeField;
+    Resources r;
     public LinearLayout mainLayout;
-    String time_string;
-    int currentPosition;
-
-    boolean timer_active = false;
-    boolean play_sound;
-    CountDownTimer timer;
+    public TextView customTimerTextView;
     SharedPreferences prefs;
+    // custom timer settings
+    boolean enable_preamble;
+    int preamble_game_time;
+    int custom_game_length;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        r = getResources();
+
         setContentView(R.layout.activity_main);
-
-        //mPlayer = MediaPlayer.create(MainActivity.this, R.raw.timer1);
-        CurrentTimeField = (TextView) findViewById(R.id.timerText);
         mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
+        customTimerTextView = (TextView) findViewById(R.id.Custom_timer_settings);
+        update_settings();
+    }
 
+    public void update_settings(){
+        // Reads the current preferences and sets the correct data in the textview.
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        mainLayout.setOnLongClickListener(new View.OnLongClickListener(){
-            @Override
-            public boolean onLongClick(View v) {
-                stopPlayer();
-                catch_long_click();
-                return true;
-                }
+        enable_preamble = prefs.getBoolean("enable_game_preamble",
+                r.getBoolean(R.bool.default_enable_preamble_time));
+        preamble_game_time = Integer.parseInt(prefs.getString("match_preamble_time",
+                Integer.toString(r.getInteger(R.integer.default_game_preamble_time))));
+        custom_game_length = Integer.parseInt(prefs.getString("custom_game_length",
+                Integer.toString(r.getInteger(R.integer.custom_match_length))));
+        String custom_timer_settings = "Game length: " + custom_game_length + "min\n";
+        if (enable_preamble){
+            custom_timer_settings += "Preamble time:" + preamble_game_time + "s\n";
+        }else{
+            custom_timer_settings += "Preamble time is disabled";
         }
-        );
-    }
-
-    public void stop_timer(){
-        // stop the timer
-        Log.d(TAG, "Stop the timer!");
-        timer.cancel();
-    }
-
-    public void start_timer(){
-        // start the timer. set the timer duration at the remaining duration of the media file.
-
-        int remainingTime = mPlayer.getDuration() - mPlayer.getCurrentPosition();
-        int interval = Integer.parseInt(prefs.getString("update_interval", "600"));
-        Log.d(TAG, "Start the timer with remaining time: " +
-                remainingTime +" interval: " + interval);
-        timer = new MediaCountDown(remainingTime, interval);
-        timer.start();
-    }
-
-    public class MediaCountDown extends CountDownTimer {
-        public MediaCountDown(long startTime, long interval) {
-            super(startTime, interval);
-        }
-        @Override
-        public void onFinish() {
-            CurrentTimeField.setText("Time's up!");
-        }
-        @Override
-        public void onTick(long millisUntilFinished) {
-            if (timer_active) {
-                currentPosition = mPlayer.getCurrentPosition() - 34000;
-                //time_string
-                //CurrentTimeField.setTextSize("80dp");
-                if (currentPosition < 60) {
-                    currentPosition = currentPosition * -1;
-                    CurrentTimeField.setText(String.format("-00:%02d", currentPosition / 1000));
-                }
-                else{
-                    if (currentPosition == 0) {
-                        CurrentTimeField.setText(String.format("00:%02d", currentPosition / 1000));
-                    }
-                    else{
-                        int minutes = (currentPosition / 1000) / 60;
-                        int seconds = (currentPosition / 1000) - (minutes * 60);
-                        CurrentTimeField.setText(String.format("%02d:%02d", minutes, seconds));
-                    }
-                }
-            }
-        }
+        customTimerTextView.setText(custom_timer_settings);
     }
 
     @Override
@@ -110,6 +59,13 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public void onResume() {
+        // Check if the settings have been changed.
+        super.onResume();
+        update_settings();
     }
 
     @Override
@@ -124,66 +80,21 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+    public void start_custom_timer(View view){
+        Intent i = new Intent("com.nicke.hockeyapp.TimerActivity");
+        i.putExtra("run_custom_timer", true);
+        startActivity(i);
+    }
+
+    public void start_default_timer(View view){
+        Intent i = new Intent("com.nicke.hockeyapp.TimerActivity");
+        i.putExtra("run_custom_timer", false);
+        startActivity(i);
+    }
 
     public void openSettings(){
         Log.d(TAG, "Open settings.");
-        stopPlayer();
         startActivity(new Intent("com.nicke.hockeyapp.SettingsActivity"));
     }
 
-    public void catch_long_click(){
-        stop_timer();
-        // build alert dialog!
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.reset_dialog_question)
-                .setTitle(R.string.reset_dialog_title)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // reset!
-                        CurrentTimeField.setText("Press screen to start");
-                        stopPlayer();
-                        timer_active = false;
-                        mPlayer.seekTo(0);
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    public void stopPlayer(){
-        if (timer_active) {
-            timer_active = false;
-            mPlayer.pause();
-            stop_timer();
-            Log.d(TAG,"Player paused!");
-        }
-    }
-
-    public void toggleTimer(View view){
-        startActivity(new Intent("com.nicke.hockeyapp.TimerActivity"));
-        /*
-        Log.d(TAG, "");
-        if (timer_active) {
-            Log.d(TAG, "Timer is running! Pause it!");
-            stopPlayer();
-        }
-        else{
-            Log.d(TAG, "Timer is not running! Start it!");
-            timer_active = true;
-            mPlayer.start();
-            if (prefs.getBoolean("enable_sound", true)){
-                mPlayer.setVolume(1f, 1f);
-            }
-            else{
-                mPlayer.setVolume(0f,0f);
-            }
-            start_timer();
-        }
-        */
-    }
 }

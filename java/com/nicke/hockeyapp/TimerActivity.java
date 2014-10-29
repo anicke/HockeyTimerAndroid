@@ -62,8 +62,9 @@ public class TimerActivity extends Activity {
         CurrentTimeField = (TextView) findViewById(R.id.timerText);
         mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
 
+        Bundle bundle = getIntent().getExtras();
+        use_custom_timer = bundle.getBoolean("run_custom_timer");
         // load settings.
-        use_custom_timer = prefs.getBoolean("enable_custom_match_length", true);
         custom_game_length = Integer.parseInt(prefs.getString("custom_game_length",
                 Integer.toString(r.getInteger(R.integer.custom_match_length))));
         enable_game_preamble = prefs.getBoolean("enable_game_preamble",
