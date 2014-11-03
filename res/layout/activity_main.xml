@@ -23,7 +23,10 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/app_name"
             android:id="@+id/timerText"
-            android:textSize="70sp" />
+            android:textSize="50sp"
+            android:textIsSelectable="false"
+            android:onClick="open_settings_onclick"
+            android:clickable="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -31,10 +34,9 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="0.7"
-        android:padding="40dp"
-        android:baselineAligned="true">
-
-
+        android:padding="10dp"
+        android:baselineAligned="true"
+        android:id="@+id/bottom_half">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="0dp"
@@ -42,7 +44,12 @@
             android:layout_weight="0.5"
             android:background="@drawable/border"
             android:padding="20dp"
-            android:onClick="start_custom_timer">
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/custom_box"
+            android:focusableInTouchMode="true"
+            android:focusable="true">
 
             <TextView
                 android:layout_width="match_parent"
@@ -50,7 +57,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/custom_timer_text"
-                android:id="@+id/custom_timer"/>
+                android:id="@+id/custom_timer"
+                android:textSize="20dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -67,7 +75,11 @@
             android:layout_weight="0.5"
             android:background="@drawable/border"
             android:padding="20dp"
-            android:onClick="start_default_timer">
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:id="@+id/standard_box"
+            android:focusableInTouchMode="false">
 
             <TextView
                 android:textColor="#33b5e5"
@@ -75,7 +87,8 @@
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/default_timer_text"
-                android:id="@+id/default_timer" />
+                android:id="@+id/default_timer"
+                android:textSize="20dp" />
         </LinearLayout>
 
     </LinearLayout>

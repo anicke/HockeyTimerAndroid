@@ -3,6 +3,7 @@ package com.nicke.hockeyapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
@@ -45,7 +46,7 @@ public class TimerActivity extends Activity {
     int currentPosition = 0;
     long CustomStartTime;
 
-    MediaPlayer mPlayer;
+    MediaPlayer mPlayer = null;
     CountDownTimer timer;
     CountDownTimer preamble_timer;
 
@@ -130,16 +131,6 @@ public class TimerActivity extends Activity {
     }
 
     public void clean_up_audio(){
-        if (mPlayer!= null){
-            try{
-                if(!mPlayer.isPlaying()){
-                    mPlayer.release();
-                }
-            }
-            catch (NullPointerException e){
-                Log.d(TAG, "Unable to release media mPlayer");
-            }
-        }
         if(ttobj !=null){
             ttobj.stop();
             ttobj.shutdown();
@@ -148,11 +139,27 @@ public class TimerActivity extends Activity {
 
     @Override
     public void onPause() {
-        super.onPause();
-        Log.d(TAG, "Cancel the timer.");
+        Log.d(TAG, "onPause");
         clean_up_audio();
         stop_timer();
+        stopPlayer();
+        super.onPause();
+    }
 
+    protected void onStop(){
+        try{
+            mPlayer.release();
+            mPlayer = null;
+            Log.d(TAG, "onStop mediaplayer relased");
+        }
+        catch (NullPointerException e) {
+            Log.d(TAG, "onStop tried to release mediaplayer.");
+        }
+        super.onStop();
+    }
+
+    public void switch_to_main_activity(){
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
     @Override
@@ -160,25 +167,26 @@ public class TimerActivity extends Activity {
         Log.d(TAG, "Back button pressed!");
         if (! timer_active) {
             Log.d(TAG, "Back button pressed. No active timer to cancel.");
-            TimerActivity.super.onBackPressed();
-            return;
+            switch_to_main_activity();
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.reset_dialog_question)
-                .setTitle(R.string.reset_dialog_title)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG, "Back button pressed confirmed.");
-                        TimerActivity.super.onBackPressed();
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG, "Back button pressed cancelled.");
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.reset_dialog_question)
+                    .setTitle(R.string.reset_dialog_title)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG, "Back button pressed confirmed.");
+                            switch_to_main_activity();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG, "Back button pressed cancelled.");
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     public void catch_long_click(){
